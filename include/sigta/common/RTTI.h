@@ -64,6 +64,7 @@ public:
     return {init<Ty>.id};
   }
 
+  IDTy getInt() const { return ID; }
   bool operator==(LinearID Other) const { return ID == Other.ID; }
 };
 
@@ -143,6 +144,8 @@ class HierarchyID
   }
 
 public:
+  HierarchyID() = default;
+
   /// Must be called inside main before getting any IDs
   static void init() {
     assert(!isFrozen && "already initialized");
@@ -165,6 +168,8 @@ public:
     }
   };
 
+  static HierarchyID maxID() { return {data<BaseTy>.id.max}; }
+
   /// Return an HierarchyID for the Ty
   template <typename Ty>
   static HierarchyID get() {
@@ -179,6 +184,7 @@ public:
     return id.ID >= n->id.min && id.ID < n->id.max;
   }
 
+  IDTy getInt() const { return ID; }
   bool operator==(HierarchyID other) const { return ID == other.ID; }
 };
 

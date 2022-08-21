@@ -10,6 +10,7 @@ ExternalProject_Get_Property(gtest source_dir binary_dir)
 add_executable(sigta_test
   RelPtrTest.cpp
   RTTI.cpp
+  ECS.cpp
 )
 
 add_dependencies(sigta_test gtest)

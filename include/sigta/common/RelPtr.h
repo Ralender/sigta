@@ -81,6 +81,13 @@ public:
     return *this;
   }
 
+  friend T *operator+(RelPtr ptr, std::ptrdiff_t off) {
+    return ptr.get() + off;
+  }
+  friend T *operator-(RelPtr ptr, std::ptrdiff_t off) {
+    return ptr.get() - off;
+  }
+
   /// This is an in-memory type it should not be copied or move
   RelPtr(const RelPtr &) = delete;
   RelPtr &operator=(const RelPtr &) = delete;
