@@ -1,4 +1,5 @@
 #include "sigta/common/ECS.h"
+#include "TestCommon.h"
 #include "gtest/gtest.h"
 
 using namespace sigta;
@@ -22,19 +23,6 @@ struct TestComponent12 {
   short s;
 };
 
-struct TestComponentComplex {
-  static inline int constructCount = 0;
-  static inline int destructCount = 0;
-
-  static void reset() {
-    constructCount = 0;
-    destructCount = 0;
-  }
-
-  TestComponentComplex() { constructCount++; }
-  ~TestComponentComplex() { destructCount++; }
-};
-
 struct TestTopLevelEntity : ecs::EntityBase {};
 
 struct TestEntity1 final : TestTopLevelEntity,
@@ -54,7 +42,7 @@ struct TestEntity2 final : TestTopLevelEntity,
 
 struct TestEntity3 final
     : TestTopLevelEntity,
-      ecs::EntitySpec<TestEntity3, TestTopLevelEntity, TestComponentComplex> {
+      ecs::EntitySpec<TestEntity3, TestTopLevelEntity, ComplexObj> {
   SIGTA_ECS_USING_ENTITY_SPEC;
   void *v;
   bool b;
@@ -123,16 +111,16 @@ TEST(ECS, complexTypes) {
   static_assert(std::is_trivially_destructible<TestComponent>::value, "");
   static_assert(std::is_trivially_destructible<TestComponent1>::value, "");
 
-  TestComponentComplex::reset();
-  EXPECT_EQ(TestComponentComplex::constructCount, 0);
-  EXPECT_EQ(TestComponentComplex::destructCount, 0);
+  ComplexObj::reset();
+  EXPECT_EQ(ComplexObj::constructCount, 0);
+  EXPECT_EQ(ComplexObj::destructCount, 0);
   {
     auto ent2 = std::make_unique<TestEntity3>();
-    EXPECT_EQ(TestComponentComplex::constructCount, 1);
-    EXPECT_EQ(TestComponentComplex::destructCount, 0);
+    EXPECT_EQ(ComplexObj::constructCount, 1);
+    EXPECT_EQ(ComplexObj::destructCount, 0);
   }
-  EXPECT_EQ(TestComponentComplex::constructCount, 1);
-  EXPECT_EQ(TestComponentComplex::destructCount, 1);
+  EXPECT_EQ(ComplexObj::constructCount, 1);
+  EXPECT_EQ(ComplexObj::destructCount, 1);
 }
 
 } // namespace

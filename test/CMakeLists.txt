@@ -8,6 +8,7 @@ ExternalProject_Add(gtest
 ExternalProject_Get_Property(gtest source_dir binary_dir)
 
 add_executable(sigta_test
+  ManagedObjs.cpp
   RelPtrTest.cpp
   RTTI.cpp
   ECS.cpp
@@ -17,6 +18,8 @@ add_dependencies(sigta_test gtest)
 include_directories(${source_dir}/include)
 target_link_libraries(sigta_test libgtest.a)
 target_link_libraries(sigta_test libgtest_main.a)
+target_compile_options(sigta_test PRIVATE -fsanitize=thread)
+target_link_options(sigta_test PRIVATE -fsanitize=thread)
 
 enable_testing()
 
